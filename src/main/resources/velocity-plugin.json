@@ -1,0 +1,10 @@
+{
+  "id": "myfirstplugin",
+  "name": "KoruAuth",
+  "version": "1.0-SNAPSHOT",
+  "description": "Auth for velocity",
+  "main": "net.koru.auth.Auth",
+  "authors": [
+    "EnzoL_"
+  ]
+}
