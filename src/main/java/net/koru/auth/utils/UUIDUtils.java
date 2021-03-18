@@ -16,7 +16,7 @@ public class UUIDUtils {
 
     public String getPremiumUUID(String name){
         try {
-            URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + name);
+            URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + name); //Idk if this supports many connections maybe need change
             Scanner scanner = new Scanner(url.openStream());
             String line = scanner.nextLine();
             scanner.close();

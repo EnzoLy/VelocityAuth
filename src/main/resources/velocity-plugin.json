@@ -1,5 +1,5 @@
 {
-  "id": "myfirstplugin",
+  "id": "koru_auth",
   "name": "KoruAuth",
   "version": "1.0-SNAPSHOT",
   "description": "Auth for velocity",
