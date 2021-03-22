@@ -26,6 +26,7 @@ public class Account {
     private boolean logged;
     private boolean register;
     private String ip;
+    private int attempts;
 
     public void save(){
         Document document = new Document();

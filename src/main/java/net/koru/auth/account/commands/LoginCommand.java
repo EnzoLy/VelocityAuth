@@ -26,6 +26,12 @@ public class LoginCommand implements SimpleCommand {
             return;
         }
 
+        if(account.getAttempts() >= 3){
+            //player.sendMessage(); //Kick after 3 attempts
+            player.disconnect(Component.text("Too many tries").color(NamedTextColor.RED));
+            return;
+        }
+
         String password = args[0];
 
         if(account.isLogged()){
@@ -38,6 +44,7 @@ public class LoginCommand implements SimpleCommand {
                 account.setLogged(true);
                 player.sendMessage(Component.text("Logged successfully.").color(NamedTextColor.GREEN));
             }else{
+                account.setAttempts(account.getAttempts() + 1);
                 player.sendMessage(Component.text("Password is incorrect").color(NamedTextColor.RED)); //Kick after 3 attempts
             }
         } catch (InvalidHashException e) {
