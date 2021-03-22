@@ -58,6 +58,7 @@ public class AuthListeners {
         if(account != null){
             account.setLogged(false);
             TaskUtil.runAsync(account::save);
+            Account.getAccounts().remove(player.getUniqueId());
         }
     }
 
