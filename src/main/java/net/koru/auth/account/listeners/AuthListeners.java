@@ -1,4 +1,4 @@
-package net.koru.auth.listeners;
+package net.koru.auth.account.listeners;
 
 import com.velocitypowered.api.event.PostOrder;
 import com.velocitypowered.api.event.Subscribe;
