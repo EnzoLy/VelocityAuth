@@ -5,6 +5,7 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.connection.LoginEvent;
 import com.velocitypowered.api.event.connection.PreLoginEvent;
+import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.proxy.Player;
 import net.koru.auth.account.Account;
 import net.koru.auth.utils.TaskUtil;
@@ -20,10 +21,7 @@ public class AuthListeners {
      */
     @Subscribe
     public void onPreLogin(PreLoginEvent event){
-        String name = event.getUsername();
-        if(UUIDUtils.isPremium(name)) {
-            event.setResult(PreLoginEvent.PreLoginComponentResult.forceOnlineMode());
-        }
+        if(UUIDUtils.isPremium(event.getUsername())) event.setResult(PreLoginEvent.PreLoginComponentResult.forceOnlineMode());
     }
 
 
@@ -47,10 +45,19 @@ public class AuthListeners {
         }
     }
 
+    @Subscribe
+    public void onChat(PlayerChatEvent event){
+        Player player = event.getPlayer();
+        if(!player.isOnlineMode()) {
+            Account account = Account.load(player);
 
-    /*
-        Change this for commands
-     */
+            if(!account.isLogged() || !account.isRegister()){
+                player.sendMessage(Component.text("Register using /register (password) (password)").color(NamedTextColor.GREEN));
+                event.setResult(PlayerChatEvent.ChatResult.denied());
+            }
+        }
+    }
+
     @Subscribe
     public void onLeave(DisconnectEvent event){
         Player player = event.getPlayer();
