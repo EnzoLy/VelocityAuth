@@ -3,6 +3,8 @@ package net.koru.auth.account.commands;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import net.koru.auth.account.Account;
+import net.koru.auth.utils.common.exception.InvalidHashException;
+import net.koru.auth.utils.common.security.PasswordUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -24,7 +26,6 @@ public class LoginCommand implements SimpleCommand {
             return;
         }
 
-
         String password = args[0];
 
         if(account.isLogged()){
@@ -32,11 +33,15 @@ public class LoginCommand implements SimpleCommand {
             return;
         }
 
-        if(password.equals(account.getPassword())){
-            account.setLogged(true);
-            player.sendMessage(Component.text("Logged successfully.").color(NamedTextColor.GREEN));
-        }else{
-            player.sendMessage(Component.text("Password is incorrect").color(NamedTextColor.RED)); //Kick after 3 attempts
+        try {
+            if(PasswordUtils.verifyPassword(password, account.getPassword())){
+                account.setLogged(true);
+                player.sendMessage(Component.text("Logged successfully.").color(NamedTextColor.GREEN));
+            }else{
+                player.sendMessage(Component.text("Password is incorrect").color(NamedTextColor.RED)); //Kick after 3 attempts
+            }
+        } catch (InvalidHashException e) {
+            e.printStackTrace();
         }
     }
 }

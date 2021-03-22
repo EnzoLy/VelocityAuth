@@ -3,6 +3,7 @@ package net.koru.auth.account.commands;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import net.koru.auth.account.Account;
+import net.koru.auth.utils.common.security.PasswordUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -37,7 +38,7 @@ public class RegisterCommand implements SimpleCommand {
             return;
         }
 
-        account.setPassword(password); //Add method to encrypt
+        account.setPassword(PasswordUtils.hashPassword(password));
 
         account.setLogged(true);
         account.setRegister(true);
