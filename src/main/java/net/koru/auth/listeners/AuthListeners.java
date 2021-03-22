@@ -33,6 +33,8 @@ public class AuthListeners {
         if(!player.isOnlineMode()){
             Account account = Account.load(player);
 
+            Account.getAccounts().put(player.getUniqueId(), account);
+
             account.setIp(player.getRemoteAddress().getHostName()); //Add max register per ip
 
             if(!account.isRegister()){
