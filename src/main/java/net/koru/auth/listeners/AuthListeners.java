@@ -7,6 +7,7 @@ import com.velocitypowered.api.event.connection.LoginEvent;
 import com.velocitypowered.api.event.connection.PreLoginEvent;
 import com.velocitypowered.api.proxy.Player;
 import net.koru.auth.account.Account;
+import net.koru.auth.utils.TaskUtil;
 import net.koru.auth.utils.UUIDUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -20,7 +21,7 @@ public class AuthListeners {
     @Subscribe
     public void onPreLogin(PreLoginEvent event){
         String name = event.getUsername();
-        if(UUIDUtils.isPremium(name)){
+        if(UUIDUtils.isPremium(name)) {
             event.setResult(PreLoginEvent.PreLoginComponentResult.forceOnlineMode());
         }
     }
@@ -31,8 +32,6 @@ public class AuthListeners {
         Player player = event.getPlayer();
         if(!player.isOnlineMode()){
             Account account = Account.load(player);
-
-            System.out.println(player.getRemoteAddress().getHostName());
 
             account.setIp(player.getRemoteAddress().getHostName()); //Add max register per ip
 
@@ -56,7 +55,7 @@ public class AuthListeners {
         Account account = Account.getAccounts().get(player.getUniqueId());
         if(account != null){
             account.setLogged(false);
-            account.save();
+            TaskUtil.runAsync(account::save);
         }
     }
 
