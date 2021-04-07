@@ -8,8 +8,12 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
+import com.velocitypowered.api.proxy.messages.ChannelIdentifier;
+import com.velocitypowered.api.proxy.messages.ChannelRegistrar;
+import com.velocitypowered.api.proxy.messages.LegacyChannelIdentifier;
 import lombok.Getter;
 import net.koru.auth.account.commands.LoginCommand;
+import net.koru.auth.account.commands.MySQLImport;
 import net.koru.auth.account.commands.RegisterCommand;
 import net.koru.auth.account.listeners.AuthListeners;
 import org.slf4j.Logger;
@@ -23,6 +27,9 @@ public class Auth {
     private final Logger logger;
     private MongoDatabase mongoDatabase;
     private static Auth auth;
+
+    private final ChannelIdentifier channelIdentifier;
+
     @Inject
     public Auth(ProxyServer server, Logger logger) {
         auth = this;
@@ -32,6 +39,8 @@ public class Auth {
         loadMongo();
         server.getCommandManager().register("register", new RegisterCommand());
         server.getCommandManager().register("login", new LoginCommand());
+        server.getCommandManager().register("mysqlimport", new MySQLImport());
+        channelIdentifier = new LegacyChannelIdentifier("k-auth");
     }
 
 
@@ -42,6 +51,7 @@ public class Auth {
     private void loadMongo(){
 
         mongoDatabase = new MongoClient(new MongoClientURI("mongodb://root:WAuLfNFbuuhmDume@149.56.107.180:27017/?authSource=admin")).getDatabase("k-auth");
+        //mongoDatabase = new MongoClient("localhost").getDatabase("k-auth");
 
         /*if (mainConfig.getBoolean("MONGO.AUTHENTICATION.ENABLED")) {
             ServerAddress serverAddress = new ServerAddress(mainConfig.getString("MONGO.HOST"),
@@ -62,6 +72,7 @@ public class Auth {
     @Subscribe
     public void onInitialize(ProxyInitializeEvent event) {
         server.getEventManager().register(this, new AuthListeners());
+        server.getChannelRegistrar().register(this.channelIdentifier);
     }
 
 }

@@ -25,8 +25,7 @@ public class UUIDUtils {
 
     public String getPremiumUUID(String name, String urlString){
         try {
-            URL url = new URL(urlString + name); //Idk if this supports many connections maybe need change
-
+            URL url = new URL(urlString + name);
             HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
             httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
             httpURLConnection.connect();
@@ -37,7 +36,6 @@ public class UUIDUtils {
                 else if(urlString.equalsIgnoreCase(URL_CLOUD_PROTECTED)) return getPremiumUUID(name, URL_MOJANG);
             }
             JsonObject obj = (new Gson()).fromJson(new InputStreamReader(httpURLConnection.getInputStream()), JsonObject.class);
-            System.out.println(obj);
             return obj.get("id").getAsString();
         } catch (Exception ex) {
             return null;
