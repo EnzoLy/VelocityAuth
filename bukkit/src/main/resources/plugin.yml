@@ -1,0 +1,4 @@
+main: net.koru.auth.bukkit.Auth
+name: Auth-Bukkit
+version: 1.0
+author: EnzoL_
